@@ -8,9 +8,9 @@ const {
   unfollowUser,
 } = require("../controllers/userController");
 
-router.route("/profile").put(protect, updateUserProfile);
-router.route("/:id").get(getUserProfile);
-router.route("/:id/follow").put(protect, followUser);
-router.route("/:id/unfollow").put(protect, unfollowUser);
+router.put("/profile", protect, updateUserProfile);
+router.get("/:id", getUserProfile);
+router.put("/:id/follow", protect, followUser);
+router.put("/:id/unfollow", protect, unfollowUser);
 
 module.exports = router;
