@@ -18,7 +18,9 @@ app.use("/api/users", userRoutes);
 app.use("/api/posts", postRoutes);
 
 app.get("/", (req, res) => {
-  res.status(200).send("Social Media Backend is LIVE and Connected!");
+
+  res.status(200).send("Social_Media_Backend is LIVE and connected!");
+  
 });
 
 const PORT = process.env.PORT || 5000;
