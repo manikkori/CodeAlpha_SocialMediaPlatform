@@ -1,13 +1,13 @@
 import { useState, useEffect, useContext } from "react";
 import API from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
-import { Heart, MessageCircle, Trash2 } from "lucide-react";
+import { Heart, MessageCircle, Trash2, Send } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
-  const [content, setContent] = useState("");
-  const [image, setImage] = useState("");
+  const [openComments, setOpenComments] = useState({});
+  const [commentTexts, setCommentTexts] = useState({});
   const { user } = useContext(AuthContext);
 
   const fetchPosts = async () => {
@@ -22,18 +22,6 @@ const Home = () => {
   useEffect(() => {
     fetchPosts();
   }, []);
-
-  const handleCreatePost = async (e) => {
-    e.preventDefault();
-    try {
-      const { data } = await API.post("/api/posts", { content, image });
-      setPosts([data, ...posts]);
-      setContent("");
-      setImage("");
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   const handleLike = async (id) => {
     try {
@@ -57,37 +45,25 @@ const Home = () => {
     }
   };
 
+  const toggleCommentSection = (id) => {
+    setOpenComments((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const handleCommentSubmit = async (e, postId) => {
+    e.preventDefault();
+    const text = commentTexts[postId];
+    if (!text || !text.trim()) return;
+    try {
+      const { data } = await API.post(`/api/posts/${postId}/comment`, { text });
+      setPosts(posts.map((post) => (post._id === postId ? data : post)));
+      setCommentTexts((prev) => ({ ...prev, [postId]: "" }));
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return (
     <div className="max-w-2xl mx-auto py-6 px-4">
-      {user && (
-        <div className="bg-white p-4 rounded-xl shadow mb-6">
-          <form onSubmit={handleCreatePost} className="space-y-3">
-            <textarea
-              rows="3"
-              placeholder={`What's on your mind, ${user.username}?`}
-              className="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              required
-            />
-            <input
-              type="text"
-              placeholder="Image URL (optional)"
-              className="w-full p-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-            />
-            <button
-              type="submit"
-              className="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 transition float-right"
-            >
-              Post
-            </button>
-            <div className="clear-both"></div>
-          </form>
-        </div>
-      )}
-
       <div className="space-y-6">
         {posts.map((post) => (
           <div key={post._id} className="bg-white p-4 rounded-xl shadow">
@@ -96,9 +72,17 @@ const Home = () => {
                 to={`/profile/${post.user?._id}`}
                 className="flex items-center space-x-3"
               >
-                <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
-                  {post.user?.username?.charAt(0).toUpperCase()}
-                </div>
+                {post.user?.profilePicture ? (
+                  <img
+                    src={post.user.profilePicture}
+                    alt="User"
+                    className="w-10 h-10 rounded-full object-cover border"
+                  />
+                ) : (
+                  <div className="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold">
+                    {post.user?.username?.charAt(0).toUpperCase()}
+                  </div>
+                )}
                 <span className="font-semibold text-gray-800 hover:underline">
                   {post.user?.username}
                 </span>
@@ -134,11 +118,67 @@ const Home = () => {
                 <Heart className="w-5 h-5 fill-current" />
                 <span>{post.likes.length}</span>
               </button>
-              <div className="flex items-center space-x-1">
+              <button
+                onClick={() => toggleCommentSection(post._id)}
+                className="flex items-center space-x-1 hover:text-blue-500 transition"
+              >
                 <MessageCircle className="w-5 h-5" />
                 <span>{post.comments.length}</span>
-              </div>
+              </button>
             </div>
+
+            {openComments[post._id] && (
+              <div className="mt-4 border-t pt-3 space-y-3 bg-gray-50 p-3 rounded-lg">
+                <div className="max-h-48 overflow-y-auto space-y-2">
+                  {post.comments.length === 0 ? (
+                    <p className="text-xs text-gray-400 text-center py-2">
+                      No comments yet. Be the first!
+                    </p>
+                  ) : (
+                    post.comments.map((comment, index) => (
+                      <div
+                        key={index}
+                        className="bg-white p-2 rounded shadow-sm text-sm"
+                      >
+                        <span className="font-bold text-gray-800 mr-2">
+                          {comment.user?.username || "User"}:
+                        </span>
+                        <span className="text-gray-700">{comment.text}</span>
+                      </div>
+                    ))
+                  )}
+                </div>
+                {user ? (
+                  <form
+                    onSubmit={(e) => handleCommentSubmit(e, post._id)}
+                    className="flex items-center gap-2 mt-2"
+                  >
+                    <input
+                      type="text"
+                      placeholder="Write a comment..."
+                      className="flex-1 px-3 py-1.5 border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      value={commentTexts[post._id] || ""}
+                      onChange={(e) =>
+                        setCommentTexts((prev) => ({
+                          ...prev,
+                          [post._id]: e.target.value,
+                        }))
+                      }
+                    />
+                    <button
+                      type="submit"
+                      className="text-blue-600 hover:text-blue-800 p-1"
+                    >
+                      <Send className="w-5 h-5" />
+                    </button>
+                  </form>
+                ) : (
+                  <p className="text-xs text-center text-gray-500">
+                    Login to comment
+                  </p>
+                )}
+              </div>
+            )}
           </div>
         ))}
       </div>
