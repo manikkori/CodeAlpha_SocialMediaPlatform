@@ -54,12 +54,18 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white shadow-md sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center gap-4">
-        <Link to="/" className="text-2xl font-bold text-blue-600 shrink-0">
+      <div className="max-w-6xl mx-auto px-3 py-2 sm:px-4 sm:py-3 flex flex-wrap sm:flex-nowrap justify-between items-center gap-2 sm:gap-4">
+        <Link
+          to="/"
+          className="text-xl sm:text-2xl font-bold text-blue-600 shrink-0"
+        >
           SocialMedia
         </Link>
 
-        <div className="relative flex-1 max-w-xs" ref={searchRef}>
+        <div
+          className="relative order-3 sm:order-2 w-full sm:w-auto sm:flex-1 max-w-none sm:max-w-xs mt-1 sm:mt-0"
+          ref={searchRef}
+        >
           <div className="relative flex items-center">
             <Search className="w-4 h-4 text-gray-400 absolute left-3" />
             <input
@@ -122,7 +128,7 @@ const Navbar = () => {
           )}
         </div>
 
-        <div className="flex items-center space-x-5 shrink-0">
+        <div className="flex items-center space-x-4 sm:space-x-5 shrink-0 order-2 sm:order-3">
           {user ? (
             <>
               <Link
@@ -130,7 +136,7 @@ const Navbar = () => {
                 className="text-gray-700 hover:text-blue-600 transition"
                 title="Home"
               >
-                <Home className="w-6 h-6" />
+                <Home className="w-6 h-6 sm:w-6 sm:h-6" />
               </Link>
               <Link
                 to="/create"
@@ -172,7 +178,7 @@ const Navbar = () => {
               </Link>
               <Link
                 to="/register"
-                className="bg-blue-600 text-white px-4 py-1.5 rounded-lg hover:bg-blue-700 transition text-sm font-medium"
+                className="bg-blue-600 text-white px-3 py-1 sm:px-4 sm:py-1.5 rounded-lg hover:bg-blue-700 transition text-sm font-medium"
               >
                 Register
               </Link>
