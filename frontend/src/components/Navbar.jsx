@@ -96,22 +96,22 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-indigo-500/10 dark:border-indigo-500/20 sticky top-0 z-50 transition-colors duration-500">
-      <div className="max-w-6xl mx-auto px-3 py-2.5 sm:px-4 sm:py-3 flex items-center justify-between gap-2 sm:gap-4">
+    <nav className="bg-white/85 dark:bg-slate-900/85 backdrop-blur-md border-b border-indigo-500/15 sticky top-0 z-50 transition-colors duration-500">
+      <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
         <Link
           to="/"
-          className="text-lg sm:text-2xl font-black bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent shrink-0"
+          className="text-xl sm:text-2xl font-black bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent shrink-0"
         >
           SocialMedia
         </Link>
 
         <div className="relative flex-1 max-w-xs" ref={searchRef}>
           <div className="relative flex items-center">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3" />
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5" />
             <input
               type="text"
               placeholder="Search users..."
-              className="w-full pl-9 pr-7 py-1.5 bg-slate-100/80 dark:bg-slate-800/80 border border-transparent focus:border-indigo-500 rounded-full text-xs sm:text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-800 transition shadow-inner"
+              className="w-full pl-10 pr-8 py-2 bg-slate-100 dark:bg-slate-800/90 border border-transparent focus:border-indigo-500 rounded-full text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:bg-white dark:focus:bg-slate-800 transition shadow-inner"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               onFocus={() => searchTerm.trim() && setShowDropdown(true)}
@@ -122,17 +122,17 @@ const Navbar = () => {
                   setSearchTerm("");
                   setShowDropdown(false);
                 }}
-                className="absolute right-2.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                className="absolute right-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
               >
-                <X className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+                <X className="w-4 h-4" />
               </button>
             )}
           </div>
 
           {showDropdown && (
-            <div className="absolute left-0 right-0 top-full mt-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-xl shadow-2xl border border-indigo-500/15 max-h-80 overflow-y-auto z-50 divide-y divide-slate-100 dark:divide-slate-800">
+            <div className="absolute left-0 right-0 top-full mt-2 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md rounded-2xl shadow-2xl border border-indigo-500/15 max-h-80 overflow-y-auto z-50 divide-y divide-slate-100 dark:divide-slate-800">
               {searchResults.length === 0 ? (
-                <div className="p-4 text-center text-xs sm:text-sm text-slate-500 dark:text-slate-400 font-medium">
+                <div className="p-4 text-center text-sm text-slate-500 dark:text-slate-400 font-medium">
                   No user found for "{searchTerm}"
                 </div>
               ) : (
@@ -140,24 +140,24 @@ const Navbar = () => {
                   <div
                     key={result._id}
                     onClick={() => handleSelectUser(result._id)}
-                    className="flex items-center gap-3 p-2.5 sm:p-3 hover:bg-indigo-500/10 cursor-pointer transition"
+                    className="flex items-center gap-3 p-3 hover:bg-indigo-500/10 cursor-pointer transition"
                   >
                     {result.profilePicture ? (
                       <img
                         src={result.profilePicture}
                         alt="Avatar"
-                        className="w-8 h-8 sm:w-9 sm:h-9 rounded-full object-cover border border-indigo-500/30 shrink-0"
+                        className="w-9 h-9 rounded-full object-cover border border-indigo-500/30 shrink-0"
                       />
                     ) : (
-                      <div className="w-8 h-8 sm:w-9 sm:h-9 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm shrink-0 shadow">
+                      <div className="w-9 h-9 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0 shadow">
                         {result.username.charAt(0).toUpperCase()}
                       </div>
                     )}
                     <div className="overflow-hidden">
-                      <h4 className="font-semibold text-xs sm:text-sm text-slate-800 dark:text-slate-100 truncate">
+                      <h4 className="font-semibold text-sm text-slate-800 dark:text-slate-100 truncate">
                         {result.username}
                       </h4>
-                      <p className="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 truncate">
+                      <p className="text-xs text-slate-500 dark:text-slate-400 truncate">
                         {result.bio}
                       </p>
                     </div>
@@ -168,7 +168,7 @@ const Navbar = () => {
           )}
         </div>
 
-        <div className="hidden sm:flex items-center space-x-4 shrink-0">
+        <div className="hidden sm:flex items-center space-x-5 shrink-0">
           <button
             onClick={toggleTheme}
             className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-indigo-500/10 transition"
@@ -205,7 +205,7 @@ const Navbar = () => {
                   <img
                     src={user.profilePicture}
                     alt="Profile"
-                    className="w-7 h-7 rounded-full object-cover border border-indigo-500/40"
+                    className="w-8 h-8 rounded-full object-cover border-2 border-indigo-500/40"
                   />
                 ) : (
                   <User className="w-6 h-6" />
@@ -229,7 +229,7 @@ const Navbar = () => {
               </Link>
               <Link
                 to="/register"
-                className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white px-4 py-1.5 rounded-full hover:shadow-lg hover:shadow-indigo-500/25 transition text-sm font-medium"
+                className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white px-5 py-2 rounded-full hover:shadow-lg hover:shadow-indigo-500/25 transition text-sm font-medium"
               >
                 Register
               </Link>
@@ -237,48 +237,36 @@ const Navbar = () => {
           )}
         </div>
 
-        <div className="flex sm:hidden items-center space-x-2 shrink-0">
-          <button
-            onClick={toggleTheme}
-            className="p-1.5 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200"
-          >
-            {isDark ? (
-              <Sun className="w-4 h-4 text-amber-400" />
-            ) : (
-              <Moon className="w-4 h-4 text-indigo-600" />
-            )}
-          </button>
+        <div className="flex sm:hidden items-center space-x-3 shrink-0">
           {user ? (
             <>
               <Link
                 to={`/profile/${user._id}`}
-                className="text-slate-700 dark:text-slate-200 p-1"
+                className="text-slate-700 dark:text-slate-200"
               >
                 {user.profilePicture ? (
                   <img
                     src={user.profilePicture}
                     alt="Profile"
-                    className="w-7 h-7 rounded-full object-cover border border-indigo-500/40"
+                    className="w-8 h-8 rounded-full object-cover border-2 border-indigo-500/40"
                   />
                 ) : (
-                  <User className="w-6 h-6" />
+                  <div className="w-8 h-8 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm shadow">
+                    {user.username.charAt(0).toUpperCase()}
+                  </div>
                 )}
               </Link>
               <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="p-1 text-slate-700 dark:text-slate-200 focus:outline-none"
+                onClick={() => setMobileMenuOpen(true)}
+                className="p-1.5 text-slate-700 dark:text-slate-200 focus:outline-none hover:bg-indigo-500/10 rounded-lg transition"
               >
-                {mobileMenuOpen ? (
-                  <X className="w-6 h-6" />
-                ) : (
-                  <Menu className="w-6 h-6" />
-                )}
+                <Menu className="w-7 h-7" />
               </button>
             </>
           ) : (
             <Link
               to="/login"
-              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-3 py-1 rounded-full text-xs font-medium"
+              className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-1.5 rounded-full text-xs font-semibold shadow"
             >
               Login
             </Link>
@@ -286,31 +274,63 @@ const Navbar = () => {
         </div>
       </div>
 
-      {mobileMenuOpen && user && (
-        <div className="sm:hidden bg-white/95 dark:bg-slate-900/95 backdrop-blur-md border-t border-indigo-500/10 px-4 py-3 space-y-3 shadow-xl">
-          <Link
-            to="/"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center space-x-3 text-slate-700 dark:text-slate-200 py-2 hover:text-indigo-600 font-medium"
-          >
-            <Home className="w-5 h-5" />
-            <span>Home Feed</span>
-          </Link>
-          <Link
-            to="/create"
-            onClick={() => setMobileMenuOpen(false)}
-            className="flex items-center space-x-3 text-indigo-600 dark:text-indigo-400 py-2 font-medium"
-          >
-            <PlusSquare className="w-5 h-5" />
-            <span>Create Post</span>
-          </Link>
-          <button
-            onClick={handleLogout}
-            className="flex items-center space-x-3 text-rose-500 py-2 font-medium w-full text-left"
-          >
-            <LogOut className="w-5 h-5" />
-            <span>Logout</span>
-          </button>
+      {mobileMenuOpen && (
+        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 sm:hidden transition-opacity">
+          <div className="fixed top-0 right-0 h-full w-72 bg-white dark:bg-slate-900 shadow-2xl border-l border-indigo-500/20 p-6 flex flex-col justify-between transform transition-transform duration-300 ease-in-out">
+            <div>
+              <div className="flex items-center justify-between pb-6 border-b border-indigo-500/15">
+                <span className="font-extrabold text-lg bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  Navigation
+                </span>
+                <button
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-full bg-slate-100 dark:bg-slate-800 transition"
+                >
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+
+              <div className="mt-6 space-y-3">
+                <Link
+                  to="/"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center space-x-4 text-slate-700 dark:text-slate-200 p-3.5 rounded-xl hover:bg-indigo-500/10 font-semibold text-base transition"
+                >
+                  <Home className="w-6 h-6 text-indigo-600 dark:text-indigo-400" />
+                  <span>Home Feed</span>
+                </Link>
+                <Link
+                  to="/create"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center space-x-4 text-slate-700 dark:text-slate-200 p-3.5 rounded-xl hover:bg-indigo-500/10 font-semibold text-base transition"
+                >
+                  <PlusSquare className="w-6 h-6 text-purple-600 dark:text-purple-400" />
+                  <span>Create Post</span>
+                </Link>
+                <button
+                  onClick={toggleTheme}
+                  className="flex items-center space-x-4 text-slate-700 dark:text-slate-200 p-3.5 rounded-xl hover:bg-indigo-500/10 font-semibold text-base w-full text-left transition"
+                >
+                  {isDark ? (
+                    <Sun className="w-6 h-6 text-amber-400" />
+                  ) : (
+                    <Moon className="w-6 h-6 text-indigo-600" />
+                  )}
+                  <span>{isDark ? "Light Mode" : "Dark Mode"}</span>
+                </button>
+              </div>
+            </div>
+
+            <div className="pt-6 border-t border-indigo-500/15">
+              <button
+                onClick={handleLogout}
+                className="flex items-center space-x-4 text-rose-500 hover:bg-rose-500/10 p-3.5 rounded-xl font-bold text-base w-full transition"
+              >
+                <LogOut className="w-6 h-6" />
+                <span>Logout</span>
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </nav>
