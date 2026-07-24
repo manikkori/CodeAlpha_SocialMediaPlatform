@@ -15,6 +15,18 @@ const Home = () => {
     return /\.(mp4|webm|ogg|mov)$/i.test(url) || url.includes("video");
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const options = {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(dateString).toLocaleDateString("en-US", options);
+  };
+
   const fetchPosts = async () => {
     try {
       const { data } = await API.get("/api/posts");
@@ -76,7 +88,7 @@ const Home = () => {
             <div className="flex justify-between items-center mb-3">
               <Link
                 to={`/profile/${post.user?._id}`}
-                className="flex items-center space-x-2.5 sm:space-x-3"
+                className="flex items-center space-x-2.5 sm:space-x-3 overflow-hidden"
               >
                 {post.user?.profilePicture ? (
                   <img
@@ -89,14 +101,19 @@ const Home = () => {
                     {post.user?.username?.charAt(0).toUpperCase()}
                   </div>
                 )}
-                <span className="font-semibold text-sm sm:text-base text-gray-800 hover:underline truncate">
-                  {post.user?.username}
-                </span>
+                <div className="flex flex-col overflow-hidden">
+                  <span className="font-semibold text-sm sm:text-base text-gray-800 hover:underline truncate">
+                    {post.user?.username}
+                  </span>
+                  <span className="text-[11px] sm:text-xs text-gray-400 font-normal">
+                    {formatDate(post.createdAt)}
+                  </span>
+                </div>
               </Link>
               {user && user._id === post.user?._id && (
                 <button
                   onClick={() => handleDelete(post._id)}
-                  className="text-gray-400 hover:text-red-500 transition p-1"
+                  className="text-gray-400 hover:text-red-500 transition p-1 shrink-0"
                 >
                   <Trash2 className="w-5 h-5" />
                 </button>
@@ -158,12 +175,17 @@ const Home = () => {
                         key={index}
                         className="bg-white p-2 rounded shadow-sm text-xs sm:text-sm"
                       >
-                        <span className="font-bold text-gray-800 mr-2">
-                          {comment.user?.username || "User"}:
-                        </span>
-                        <span className="text-gray-700 break-words">
+                        <div className="flex justify-between items-center mb-1">
+                          <span className="font-bold text-gray-800">
+                            {comment.user?.username || "User"}
+                          </span>
+                          <span className="text-[10px] text-gray-400">
+                            {formatDate(comment.createdAt)}
+                          </span>
+                        </div>
+                        <p className="text-gray-700 break-words">
                           {comment.text}
-                        </span>
+                        </p>
                       </div>
                     ))
                   )}

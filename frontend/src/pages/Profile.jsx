@@ -21,6 +21,18 @@ const Profile = () => {
     return /\.(mp4|webm|ogg|mov)$/i.test(url) || url.includes("video");
   };
 
+  const formatDate = (dateString) => {
+    if (!dateString) return "";
+    const options = {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+    };
+    return new Date(dateString).toLocaleDateString("en-US", options);
+  };
+
   useEffect(() => {
     const fetchUserAndPosts = async () => {
       try {
@@ -260,7 +272,10 @@ const Profile = () => {
                 key={post._id}
                 className="bg-white p-3 sm:p-4 rounded-xl shadow"
               >
-                <div className="flex justify-end mb-2">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-xs text-gray-400 font-medium">
+                    {formatDate(post.createdAt)}
+                  </span>
                   {currentUser && currentUser._id === profileUser._id && (
                     <button
                       onClick={() => handleDeletePost(post._id)}
