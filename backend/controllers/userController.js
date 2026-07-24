@@ -1,5 +1,24 @@
 const User = require("../models/User");
 
+const searchUsers = async (req, res) => {
+  try {
+    const keyword = req.query.q
+      ? {
+          username: {
+            $regex: req.query.q,
+            $options: "i",
+          },
+        }
+      : {};
+    const users = await User.find(keyword)
+      .select("username profilePicture bio")
+      .limit(10);
+    res.json(users);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const getUserProfile = async (req, res) => {
   try {
     const user = await User.findById(req.params.id)
@@ -91,6 +110,7 @@ const unfollowUser = async (req, res) => {
 };
 
 module.exports = {
+  searchUsers,
   getUserProfile,
   updateUserProfile,
   followUser,
