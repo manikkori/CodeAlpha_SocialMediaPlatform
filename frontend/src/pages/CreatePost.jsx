@@ -12,7 +12,7 @@ const CreatePost = () => {
 
   const isVideo = (url) => {
     if (!url) return false;
-    return /\.(mp4|webm|ogg|mov)$/i.test(url) || url.includes("video");
+    return /\.(mp4|webm|ogg|mov|m4v)$/i.test(url) || url.includes("video");
   };
 
   const handleSubmit = async (e) => {
@@ -59,17 +59,17 @@ const CreatePost = () => {
           </div>
           <div>
             <label className="block text-slate-700 dark:text-slate-300 text-sm sm:text-base font-medium mb-1">
-              Image or Video URL (Optional)
+              Image or HD/4K Video URL (Optional)
             </label>
             <input
               type="url"
-              placeholder="https://example.com/photo.jpg or video.mp4"
+              placeholder="https://example.com/photo.jpg or 4k-video.mp4"
               className="w-full p-2.5 sm:p-3 bg-slate-50 dark:bg-slate-800/80 border border-indigo-500/20 rounded-xl text-sm sm:text-base text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-inner"
               value={image}
               onChange={(e) => setImage(e.target.value)}
             />
             <p className="text-xs text-slate-400 mt-1">
-              Supports direct image (.jpg, .png) and video (.mp4, .webm) links.
+              Supports HD/4K (.mp4, .webm, .mov) and standard image links.
             </p>
           </div>
           {image && (
@@ -77,18 +77,20 @@ const CreatePost = () => {
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-1">
                 Media Preview:
               </p>
-              <div className="rounded-xl overflow-hidden bg-black flex justify-center max-h-64 border border-indigo-500/20">
+              <div className="rounded-xl overflow-hidden bg-black flex justify-center max-h-96 border border-indigo-500/20">
                 {isVideo(image) ? (
                   <video
                     src={image}
                     controls
-                    className="w-full max-h-64 object-contain"
+                    preload="metadata"
+                    playsInline
+                    className="w-full max-h-96 object-contain"
                   />
                 ) : (
                   <img
                     src={image}
                     alt="Preview"
-                    className="w-full max-h-64 object-cover"
+                    className="w-full max-h-96 object-cover"
                   />
                 )}
               </div>

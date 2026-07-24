@@ -81,7 +81,7 @@ const Navbar = () => {
   }, []);
 
   const handleLogout = () => {
-    if (window.confirm("Are you sure you want to logout?")) {
+    if (window.confirm("Are you sure you want to sign out?")) {
       logout();
       setMobileMenuOpen(false);
       navigate("/login");
@@ -96,13 +96,13 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-indigo-500/15 sticky top-0 z-50 transition-colors duration-500">
+    <nav className="bg-white dark:bg-slate-900 border-b border-indigo-500/15 sticky top-0 z-50 transition-colors duration-500 shadow-sm">
       <div className="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
         <Link
           to="/"
           className="text-xl sm:text-2xl font-black bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent shrink-0"
         >
-          Codersgram
+          SocialMedia
         </Link>
 
         <div className="relative flex-1 max-w-xs" ref={searchRef}>
@@ -275,98 +275,118 @@ const Navbar = () => {
       </div>
 
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 sm:hidden">
+        <div className="fixed inset-0 z-[999] flex justify-end sm:hidden">
           <div
             onClick={() => setMobileMenuOpen(false)}
-            className="fixed inset-0 bg-black/75 backdrop-blur-sm transition-opacity"
+            className="fixed inset-0 bg-black/75 transition-opacity"
           />
 
-          <div className="fixed top-0 right-0 h-full w-[85%] max-w-sm bg-white dark:bg-slate-950 shadow-2xl border-l border-indigo-500/20 p-6 flex flex-col justify-between z-50 transition-all">
+          <div className="relative w-[85%] max-w-sm h-full bg-white dark:bg-slate-900 shadow-2xl flex flex-col justify-between overflow-y-auto z-10 transition-all">
             <div>
-              <div className="flex items-center justify-between pb-6 border-b border-slate-200 dark:border-slate-800">
+              <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 p-6 text-white shrink-0 shadow-md">
+                <div className="flex items-center justify-between mb-4">
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="p-1.5 rounded-full bg-white/20 hover:bg-white/30 text-white transition"
+                  >
+                    <X className="w-6 h-6" />
+                  </button>
+                  {user && (
+                    <button
+                      onClick={handleLogout}
+                      className="flex items-center gap-1.5 text-xs font-bold bg-black/20 hover:bg-black/30 px-3 py-1.5 rounded-full text-white transition"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      <span>Sign out</span>
+                    </button>
+                  )}
+                </div>
+
                 {user ? (
-                  <div className="flex items-center gap-3 overflow-hidden">
+                  <div className="flex items-center gap-3.5">
                     {user.profilePicture ? (
                       <img
                         src={user.profilePicture}
                         alt="Avatar"
-                        className="w-11 h-11 rounded-full object-cover border-2 border-indigo-500/50 shrink-0"
+                        className="w-14 h-14 rounded-full object-cover border-2 border-white shadow-md shrink-0"
                       />
                     ) : (
-                      <div className="w-11 h-11 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg shrink-0 shadow">
+                      <div className="w-14 h-14 bg-white text-indigo-600 rounded-full flex items-center justify-center font-black text-xl shadow-md shrink-0">
                         {user.username.charAt(0).toUpperCase()}
                       </div>
                     )}
                     <div className="overflow-hidden">
-                      <h4 className="font-extrabold text-base text-slate-900 dark:text-white truncate">
+                      <h4 className="font-extrabold text-lg text-white truncate">
                         {user.username}
                       </h4>
-                      <p className="text-xs text-indigo-600 dark:text-indigo-400 font-medium">
-                        Logged In
+                      <p className="text-xs text-indigo-100 font-medium truncate">
+                        {user.email || "Welcome back!"}
                       </p>
                     </div>
                   </div>
                 ) : (
-                  <span className="font-extrabold text-xl bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    Menu
-                  </span>
+                  <div className="py-2">
+                    <h4 className="font-black text-xl">Welcome Guest</h4>
+                    <p className="text-xs text-indigo-100 mt-1">
+                      Login to explore social features
+                    </p>
+                  </div>
                 )}
-                <button
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-white rounded-full bg-slate-100 dark:bg-slate-900 transition shrink-0"
-                >
-                  <X className="w-6 h-6" />
-                </button>
               </div>
 
-              <div className="mt-8 space-y-3">
+              <div className="p-6 space-y-2 bg-white dark:bg-slate-900">
                 <Link
                   to="/"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center space-x-4 p-4 rounded-2xl bg-blue-500/10 text-blue-600 dark:text-blue-400 font-bold text-base transition active:scale-95"
+                  className="flex items-center space-x-4 p-3.5 rounded-xl text-slate-800 dark:text-slate-100 hover:bg-indigo-50 dark:hover:bg-slate-800 font-bold text-base transition"
                 >
-                  <div className="p-2 bg-blue-500/20 rounded-xl">
-                    <Home className="w-6 h-6" />
-                  </div>
+                  <Home className="w-6 h-6 text-indigo-600 dark:text-indigo-400 shrink-0" />
                   <span>Home Feed</span>
                 </Link>
                 <Link
                   to="/create"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center space-x-4 p-4 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400 font-bold text-base transition active:scale-95"
+                  className="flex items-center space-x-4 p-3.5 rounded-xl text-slate-800 dark:text-slate-100 hover:bg-indigo-50 dark:hover:bg-slate-800 font-bold text-base transition"
                 >
-                  <div className="p-2 bg-purple-500/20 rounded-xl">
-                    <PlusSquare className="w-6 h-6" />
-                  </div>
+                  <PlusSquare className="w-6 h-6 text-purple-600 dark:text-purple-400 shrink-0" />
                   <span>Create Post</span>
                 </Link>
+                {user && (
+                  <Link
+                    to={`/profile/${user._id}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center space-x-4 p-3.5 rounded-xl text-slate-800 dark:text-slate-100 hover:bg-indigo-50 dark:hover:bg-slate-800 font-bold text-base transition"
+                  >
+                    <User className="w-6 h-6 text-blue-600 dark:text-blue-400 shrink-0" />
+                    <span>My Profile</span>
+                  </Link>
+                )}
+                <div className="border-t border-slate-100 dark:border-slate-800 my-4 pt-2"></div>
                 <button
                   onClick={toggleTheme}
-                  className="flex items-center space-x-4 p-4 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400 font-bold text-base w-full text-left transition active:scale-95"
+                  className="flex items-center space-x-4 p-3.5 rounded-xl text-slate-800 dark:text-slate-100 hover:bg-indigo-50 dark:hover:bg-slate-800 font-bold text-base w-full text-left transition"
                 >
-                  <div className="p-2 bg-amber-500/20 rounded-xl">
-                    {isDark ? (
-                      <Sun className="w-6 h-6" />
-                    ) : (
-                      <Moon className="w-6 h-6" />
-                    )}
-                  </div>
-                  <span>
-                    {isDark ? "Switch to Light Mode" : "Switch to Dark Mode"}
-                  </span>
+                  {isDark ? (
+                    <Sun className="w-6 h-6 text-amber-500 shrink-0" />
+                  ) : (
+                    <Moon className="w-6 h-6 text-indigo-600 shrink-0" />
+                  )}
+                  <span>{isDark ? "Light Mode" : "Dark Mode"}</span>
                 </button>
               </div>
             </div>
 
-            <div className="pt-6 border-t border-slate-200 dark:border-slate-800 mt-auto">
-              <button
-                onClick={handleLogout}
-                className="flex items-center justify-center space-x-3 bg-gradient-to-r from-rose-500 to-red-600 text-white p-4 rounded-2xl font-black text-base w-full shadow-lg shadow-rose-500/25 transition active:scale-95"
-              >
-                <LogOut className="w-6 h-6" />
-                <span>Logout Account</span>
-              </button>
-            </div>
+            {user && (
+              <div className="p-6 border-t border-slate-100 dark:border-slate-800 bg-white dark:bg-slate-900 mt-auto">
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center justify-center space-x-2 w-full py-3.5 bg-rose-500/10 hover:bg-rose-500 text-rose-600 hover:text-white font-extrabold rounded-xl transition shadow-sm"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span>Log Out</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}

@@ -12,7 +12,7 @@ const Home = () => {
 
   const isVideo = (url) => {
     if (!url) return false;
-    return /\.(mp4|webm|ogg|mov)$/i.test(url) || url.includes("video");
+    return /\.(mp4|webm|ogg|mov|m4v)$/i.test(url) || url.includes("video");
   };
 
   const formatDate = (dateString) => {
@@ -132,6 +132,8 @@ const Home = () => {
                   <video
                     src={post.image}
                     controls
+                    preload="metadata"
+                    playsInline
                     className="w-full max-h-96 object-contain"
                   />
                 ) : (
