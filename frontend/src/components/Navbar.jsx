@@ -102,7 +102,7 @@ const Navbar = () => {
           to="/"
           className="text-xl sm:text-2xl font-black bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 bg-clip-text text-transparent shrink-0"
         >
-          SocialMedia
+          Codersgram.
         </Link>
 
         <div className="relative flex-1 max-w-xs" ref={searchRef}>
