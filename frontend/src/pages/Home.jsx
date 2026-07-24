@@ -84,7 +84,10 @@ const Home = () => {
     <div className="max-w-2xl mx-auto py-4 sm:py-6 px-3 sm:px-4">
       <div className="space-y-4 sm:space-y-6">
         {posts.map((post) => (
-          <div key={post._id} className="bg-white p-3 sm:p-4 rounded-xl shadow">
+          <div
+            key={post._id}
+            className="bg-white/80 dark:bg-slate-900/80 backdrop-blur-md p-3 sm:p-4 rounded-2xl shadow-xl border border-indigo-500/15 transition-colors duration-500"
+          >
             <div className="flex justify-between items-center mb-3">
               <Link
                 to={`/profile/${post.user?._id}`}
@@ -94,18 +97,18 @@ const Home = () => {
                   <img
                     src={post.user.profilePicture}
                     alt="User"
-                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border shrink-0"
+                    className="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover border border-indigo-500/40 shrink-0"
                   />
                 ) : (
-                  <div className="w-9 h-9 sm:w-10 sm:h-10 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold shrink-0">
+                  <div className="w-9 h-9 sm:w-10 sm:h-10 bg-gradient-to-tr from-blue-600 to-purple-600 rounded-full flex items-center justify-center text-white font-bold shrink-0 shadow">
                     {post.user?.username?.charAt(0).toUpperCase()}
                   </div>
                 )}
                 <div className="flex flex-col overflow-hidden">
-                  <span className="font-semibold text-sm sm:text-base text-gray-800 hover:underline truncate">
+                  <span className="font-bold text-sm sm:text-base text-slate-800 dark:text-slate-100 hover:text-indigo-600 truncate">
                     {post.user?.username}
                   </span>
-                  <span className="text-[11px] sm:text-xs text-gray-400 font-normal">
+                  <span className="text-[11px] sm:text-xs text-slate-400 font-medium">
                     {formatDate(post.createdAt)}
                   </span>
                 </div>
@@ -113,18 +116,18 @@ const Home = () => {
               {user && user._id === post.user?._id && (
                 <button
                   onClick={() => handleDelete(post._id)}
-                  className="text-gray-400 hover:text-red-500 transition p-1 shrink-0"
+                  className="text-slate-400 hover:text-rose-500 transition p-1 shrink-0"
                 >
                   <Trash2 className="w-5 h-5" />
                 </button>
               )}
             </div>
-            <p className="text-gray-700 text-sm sm:text-base mb-3 whitespace-pre-line break-words">
+            <p className="text-slate-700 dark:text-slate-200 text-sm sm:text-base mb-3 whitespace-pre-line break-words">
               {post.content}
             </p>
 
             {post.image && (
-              <div className="mb-3 rounded-lg overflow-hidden bg-black flex justify-center max-h-96">
+              <div className="mb-3 rounded-xl overflow-hidden bg-black flex justify-center max-h-96 border border-indigo-500/20">
                 {isVideo(post.image) ? (
                   <video
                     src={post.image}
@@ -141,12 +144,12 @@ const Home = () => {
               </div>
             )}
 
-            <div className="flex items-center space-x-6 border-t pt-3 text-gray-600 text-sm">
+            <div className="flex items-center space-x-6 border-t border-indigo-500/10 pt-3 text-slate-600 dark:text-slate-300 text-sm">
               <button
                 onClick={() => handleLike(post._id)}
-                className={`flex items-center space-x-1 hover:text-red-500 transition ${
+                className={`flex items-center space-x-1 hover:text-rose-500 transition ${
                   user && post.likes.includes(user._id)
-                    ? "text-red-500 font-medium"
+                    ? "text-rose-500 font-medium"
                     : ""
                 }`}
               >
@@ -155,7 +158,7 @@ const Home = () => {
               </button>
               <button
                 onClick={() => toggleCommentSection(post._id)}
-                className="flex items-center space-x-1 hover:text-blue-500 transition"
+                className="flex items-center space-x-1 hover:text-indigo-500 transition"
               >
                 <MessageCircle className="w-5 h-5" />
                 <span>{post.comments.length}</span>
@@ -163,27 +166,27 @@ const Home = () => {
             </div>
 
             {openComments[post._id] && (
-              <div className="mt-3 sm:mt-4 border-t pt-3 space-y-3 bg-gray-50 p-2.5 sm:p-3 rounded-lg">
+              <div className="mt-3 sm:mt-4 border-t border-indigo-500/10 pt-3 space-y-3 bg-indigo-500/5 p-2.5 sm:p-3 rounded-xl">
                 <div className="max-h-48 overflow-y-auto space-y-2">
                   {post.comments.length === 0 ? (
-                    <p className="text-xs text-gray-400 text-center py-2">
+                    <p className="text-xs text-slate-400 text-center py-2">
                       No comments yet. Be the first!
                     </p>
                   ) : (
                     post.comments.map((comment, index) => (
                       <div
                         key={index}
-                        className="bg-white p-2 rounded shadow-sm text-xs sm:text-sm"
+                        className="bg-white/90 dark:bg-slate-800/90 p-2 rounded-lg shadow-sm border border-indigo-500/10 text-xs sm:text-sm"
                       >
                         <div className="flex justify-between items-center mb-1">
-                          <span className="font-bold text-gray-800">
+                          <span className="font-bold text-slate-800 dark:text-slate-100">
                             {comment.user?.username || "User"}
                           </span>
-                          <span className="text-[10px] text-gray-400">
+                          <span className="text-[10px] text-slate-400">
                             {formatDate(comment.createdAt)}
                           </span>
                         </div>
-                        <p className="text-gray-700 break-words">
+                        <p className="text-slate-700 dark:text-slate-200 break-words">
                           {comment.text}
                         </p>
                       </div>
@@ -198,7 +201,7 @@ const Home = () => {
                     <input
                       type="text"
                       placeholder="Write a comment..."
-                      className="flex-1 px-3 py-1.5 border rounded-full text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      className="flex-1 px-3 py-1.5 bg-white dark:bg-slate-800 border border-indigo-500/20 rounded-full text-xs sm:text-sm text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       value={commentTexts[post._id] || ""}
                       onChange={(e) =>
                         setCommentTexts((prev) => ({
@@ -209,13 +212,13 @@ const Home = () => {
                     />
                     <button
                       type="submit"
-                      className="text-blue-600 hover:text-blue-800 p-1 shrink-0"
+                      className="text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 p-1 shrink-0"
                     >
                       <Send className="w-5 h-5" />
                     </button>
                   </form>
                 ) : (
-                  <p className="text-xs text-center text-gray-500">
+                  <p className="text-xs text-center text-slate-500">
                     Login to comment
                   </p>
                 )}

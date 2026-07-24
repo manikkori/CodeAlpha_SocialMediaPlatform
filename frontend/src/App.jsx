@@ -8,7 +8,7 @@ import CreatePost from "./pages/CreatePost";
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-50 via-purple-50 to-pink-50 dark:from-slate-950 dark:via-indigo-950 dark:to-purple-950 text-slate-800 dark:text-slate-100 transition-colors duration-500">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
