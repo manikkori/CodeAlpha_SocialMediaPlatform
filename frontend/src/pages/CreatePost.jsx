@@ -7,12 +7,22 @@ const CreatePost = () => {
   const [content, setContent] = useState("");
   const [image, setImage] = useState("");
   const [loading, setLoading] = useState(false);
+  const [videoError, setVideoError] = useState(false);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const isVideo = (url) => {
     if (!url) return false;
-    return /\.(mp4|webm|ogg|mov|m4v)$/i.test(url) || url.includes("video");
+    return (
+      /\.(mp4|webm|ogg|mov|m4v)$/i.test(url) ||
+      url.includes("video") ||
+      url.includes(".mp4")
+    );
+  };
+
+  const handleMediaChange = (e) => {
+    setImage(e.target.value);
+    setVideoError(false);
   };
 
   const handleSubmit = async (e) => {
@@ -59,17 +69,17 @@ const CreatePost = () => {
           </div>
           <div>
             <label className="block text-slate-700 dark:text-slate-300 text-sm sm:text-base font-medium mb-1">
-              Image or HD/4K Video URL (Optional)
+              Direct Image or Video MP4 URL
             </label>
             <input
               type="url"
-              placeholder="https://example.com/photo.jpg or 4k-video.mp4"
+              placeholder="https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"
               className="w-full p-2.5 sm:p-3 bg-slate-50 dark:bg-slate-800/80 border border-indigo-500/20 rounded-xl text-sm sm:text-base text-slate-800 dark:text-slate-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-inner"
               value={image}
-              onChange={(e) => setImage(e.target.value)}
+              onChange={handleMediaChange}
             />
             <p className="text-xs text-slate-400 mt-1">
-              Supports HD/4K (.mp4, .webm, .mov) and standard image links.
+              Must be a direct file URL ending in .mp4, .webm, .jpg, or .png
             </p>
           </div>
           {image && (
@@ -77,19 +87,40 @@ const CreatePost = () => {
               <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mb-1">
                 Media Preview:
               </p>
-              <div className="rounded-xl overflow-hidden bg-black flex justify-center max-h-96 border border-indigo-500/20">
+              <div className="rounded-xl overflow-hidden bg-black flex justify-center max-h-96 border border-indigo-500/20 relative">
                 {isVideo(image) ? (
-                  <video
-                    src={image}
-                    controls
-                    preload="metadata"
-                    playsInline
-                    className="w-full max-h-96 object-contain"
-                  />
+                  videoError ? (
+                    <div className="p-8 text-center bg-slate-900 text-rose-400 text-xs sm:text-sm flex flex-col items-center justify-center min-h-[160px] w-full">
+                      <span className="font-bold text-base mb-1">
+                        ⚠️ Video Format Not Supported
+                      </span>
+                      <span>
+                        Please provide a direct link to an H.264 encoded .mp4 or
+                        .webm file.
+                      </span>
+                      <span className="text-slate-500 mt-2 text-[11px]">
+                        YouTube/Google Drive share links do not work in standard
+                        video players.
+                      </span>
+                    </div>
+                  ) : (
+                    <video
+                      src={image}
+                      controls
+                      preload="metadata"
+                      playsInline
+                      onError={() => setVideoError(true)}
+                      className="w-full max-h-96 object-contain"
+                    />
+                  )
                 ) : (
                   <img
                     src={image}
                     alt="Preview"
+                    onError={(e) => {
+                      e.target.src =
+                        "https://via.placeholder.com/400x200?text=Invalid+Image+URL";
+                    }}
                     className="w-full max-h-96 object-cover"
                   />
                 )}
@@ -98,7 +129,7 @@ const CreatePost = () => {
           )}
           <button
             type="submit"
-            disabled={loading}
+            disabled={loading || videoError}
             className="w-full bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white py-2.5 sm:py-3 rounded-xl text-sm sm:text-base font-semibold hover:shadow-lg hover:shadow-indigo-500/25 transition disabled:opacity-50"
           >
             {loading ? "Posting..." : "Share Post"}

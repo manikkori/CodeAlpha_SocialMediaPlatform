@@ -18,10 +18,15 @@ const Profile = () => {
 
   const [openComments, setOpenComments] = useState({});
   const [commentTexts, setCommentTexts] = useState({});
+  const [failedVideos, setFailedVideos] = useState({});
 
   const isVideo = (url) => {
     if (!url) return false;
-    return /\.(mp4|webm|ogg|mov|m4v)$/i.test(url) || url.includes("video");
+    return (
+      /\.(mp4|webm|ogg|mov|m4v)$/i.test(url) ||
+      url.includes("video") ||
+      url.includes(".mp4")
+    );
   };
 
   const formatDate = (dateString) => {
@@ -333,17 +338,46 @@ const Profile = () => {
                 {post.image && (
                   <div className="mb-3 rounded-xl overflow-hidden bg-black flex justify-center max-h-96 border border-indigo-500/20">
                     {isVideo(post.image) ? (
-                      <video
-                        src={post.image}
-                        controls
-                        preload="metadata"
-                        playsInline
-                        className="w-full max-h-96 object-contain"
-                      />
+                      failedVideos[post._id] ? (
+                        <div className="p-6 text-center bg-slate-900 text-rose-400 text-xs sm:text-sm flex flex-col items-center justify-center min-h-[160px] w-full">
+                          <span className="font-bold text-base mb-1">
+                            ⚠️ Video Cannot Be Played
+                          </span>
+                          <span>
+                            The file format or link is unsupported by your
+                            browser.
+                          </span>
+                          <a
+                            href={post.image}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="mt-3 text-indigo-400 hover:underline text-xs"
+                          >
+                            Try opening direct link ↗
+                          </a>
+                        </div>
+                      ) : (
+                        <video
+                          src={post.image}
+                          controls
+                          preload="metadata"
+                          playsInline
+                          onError={() =>
+                            setFailedVideos((prev) => ({
+                              ...prev,
+                              [post._id]: true,
+                            }))
+                          }
+                          className="w-full max-h-96 object-contain"
+                        />
+                      )
                     ) : (
                       <img
                         src={post.image}
                         alt="Post"
+                        onError={(e) => {
+                          e.target.style.display = "none";
+                        }}
                         className="w-full max-h-96 object-cover"
                       />
                     )}
