@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import API from "../api/axios";
 import { AuthContext } from "../context/AuthContext";
-import { Heart, MessageCircle, Edit2, X } from "lucide-react";
+import { Heart, MessageCircle, Edit2, X, Trash2 } from "lucide-react";
 
 const Profile = () => {
   const { id } = useParams();
@@ -98,6 +98,16 @@ const Profile = () => {
           }),
         );
       }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const handleDeletePost = async (postId) => {
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
+    try {
+      await API.delete(`/api/posts/${postId}`);
+      setUserPosts(userPosts.filter((post) => post._id !== postId));
     } catch (error) {
       console.error(error);
     }
@@ -250,6 +260,16 @@ const Profile = () => {
                 key={post._id}
                 className="bg-white p-3 sm:p-4 rounded-xl shadow"
               >
+                <div className="flex justify-end mb-2">
+                  {currentUser && currentUser._id === profileUser._id && (
+                    <button
+                      onClick={() => handleDeletePost(post._id)}
+                      className="text-gray-400 hover:text-red-500 transition p-1"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  )}
+                </div>
                 <p className="text-gray-700 text-sm sm:text-base mb-3 whitespace-pre-line break-words">
                   {post.content}
                 </p>

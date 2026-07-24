@@ -42,6 +42,7 @@ const Home = () => {
   };
 
   const handleDelete = async (id) => {
+    if (!window.confirm("Are you sure you want to delete this post?")) return;
     try {
       await API.delete(`/api/posts/${id}`);
       setPosts(posts.filter((post) => post._id !== id));
