@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { LogOut, User, Home } from "lucide-react";
+import { LogOut, User, Home, PlusSquare } from "lucide-react";
 
 const Navbar = () => {
   const { user, logout } = useContext(AuthContext);
@@ -24,23 +24,38 @@ const Navbar = () => {
               <Link
                 to="/"
                 className="flex items-center text-gray-700 hover:text-blue-600"
+                title="Home"
               >
-                <Home className="w-5 h-5 mr-1" />
-                <span>Home</span>
+                <Home className="w-6 h-6" />
+              </Link>
+              <Link
+                to="/create"
+                className="flex items-center text-gray-700 hover:text-blue-600"
+                title="Create Post"
+              >
+                <PlusSquare className="w-6 h-6 text-blue-600" />
               </Link>
               <Link
                 to={`/profile/${user._id}`}
                 className="flex items-center text-gray-700 hover:text-blue-600"
+                title="Profile"
               >
-                <User className="w-5 h-5 mr-1" />
-                <span>{user.username}</span>
+                {user.profilePicture ? (
+                  <img
+                    src={user.profilePicture}
+                    alt="Profile"
+                    className="w-7 h-7 rounded-full object-cover border"
+                  />
+                ) : (
+                  <User className="w-6 h-6" />
+                )}
               </Link>
               <button
                 onClick={handleLogout}
                 className="flex items-center text-red-500 hover:text-red-700 font-medium"
+                title="Logout"
               >
-                <LogOut className="w-5 h-5 mr-1" />
-                <span>Logout</span>
+                <LogOut className="w-6 h-6" />
               </button>
             </>
           ) : (
